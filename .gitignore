@@ -1,0 +1,51 @@
+# ========== Unity ==========
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+
+# Si usas Addressables
+[Aa]ssets/AddressableAssetsData/*/*.bin*
+
+# Unity generated files
+sysinfo.txt
+
+# ========== Visual Studio / Rider ==========
+.vs/
+.idea/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.opendb
+
+# Rider cache
+*.DotSettings.user
+
+# ========== OS ==========
+.DS_Store
+Thumbs.db
+
+# ========== Builds ==========
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# ========== Addressables / Addressable build cache ==========
+/Assets/StreamingAssets/aa.meta
+/Assets/StreamingAssets/aa/
+
+# ========== Logs ==========
+*.log
