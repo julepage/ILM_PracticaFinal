@@ -4,7 +4,7 @@ public class MovimientoCoche : MonoBehaviour
 {
     private Rigidbody rb;
 
-    [Header("Referencias F�sicas")]
+    [Header("Referencias Fisicas")]
     public WheelCollider wcDelanteraIzquierda;
     public WheelCollider wcDelanteraDerecha;
     public WheelCollider wcTraseraIzquierda;
@@ -16,37 +16,34 @@ public class MovimientoCoche : MonoBehaviour
     public Transform meshTraseraIzquierda;
     public Transform meshTraseraDerecha;
 
-    [Header("Referencias del Interior (Habit�culo)")]
+    [Header("Referencias del Interior (Habitaculo)")]
     public Transform mallaVolante;
-    public Transform mallaVarillaVelocidad;
 
-    [Header("Configuraci�n del Motor")]
-    public float fuerzaMotorAdelante = 1250f;
-    public float fuerzaMotorAtras = 500f;
+    [Header("Configuracion Arcade (Rocket League Style)")]
+    public float fuerzaMotorAdelante = 3500f;
+    public float fuerzaMotorAtras = 2000f;
     public float maxAnguloGiro = 40f;
-    public float fuerzaFreno = 4000f;
-    public Vector3 centroDeMasaOffset = new Vector3(0f, -0.5f, 0f);
+    public float fuerzaFrenoDePie = 40000f;
+    public float fuerzaFrenoMano = 80000f;
+    public Vector3 centroDeMasaOffset = new Vector3(0f, -1.2f, 0f);
 
-    [Header("Ajustes de Rotaci�n Interior")]
-    public float multiplicadorGiroVolante = 10f; 
-    public float maxVelocidadTablero = 200f;     
-    public float maxGiroVarilla = 180f;         
+    [Header("Ajustes de Rotacion Interior")]
+    public float multiplicadorGiroVolante = 10f;
     public Vector3 offsetRotacionRueda = new Vector3(0f, 0f, 90f);
 
     private Quaternion rotInicialVolante;
-    private Quaternion rotInicialVarillas;
-
     private float inputAcelerar;
     private float inputGiro;
     private bool estaFrenando;
+    private bool estaDerrapando;
+    private float pesoLateral = 0f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = centroDeMasaOffset;
 
-        rotInicialVolante = Quaternion.Euler(0f, -62.5f, -90f);
-        rotInicialVarillas = Quaternion.Euler(0f, 90f, -90f);
+        rotInicialVolante = Quaternion.Euler(27.5f, 90f, 90f);
     }
 
     void Update()
@@ -55,6 +52,7 @@ public class MovimientoCoche : MonoBehaviour
         inputGiro = Input.GetAxis("Horizontal");
 
         estaFrenando = Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.JoystickButton0);
+        estaDerrapando = Input.GetKey(KeyCode.LeftShift);
 
         ActualizarVisualRueda(wcDelanteraIzquierda, meshDelanteraIzquierda);
         ActualizarVisualRueda(wcDelanteraDerecha, meshDelanteraDerecha);
@@ -62,47 +60,149 @@ public class MovimientoCoche : MonoBehaviour
         ActualizarVisualRueda(wcTraseraDerecha, meshTraseraDerecha);
 
         ActualizarVolante();
-
-        ActualizarVelocimetro();
     }
 
     void FixedUpdate()
     {
-        if (estaFrenando)
-        {
-            wcTraseraIzquierda.brakeTorque = fuerzaFreno;
-            wcTraseraDerecha.brakeTorque = fuerzaFreno;
-            wcDelanteraIzquierda.brakeTorque = fuerzaFreno;
-            wcDelanteraDerecha.brakeTorque = fuerzaFreno;
+        float velocidadLocalZ = transform.InverseTransformDirection(rb.linearVelocity).z;
+        float velocidadMS = rb.linearVelocity.magnitude;
+        float velocidadKMH = velocidadMS * 3.6f;
+        bool tocandoSuelo = wcDelanteraIzquierda.isGrounded || wcDelanteraDerecha.isGrounded || wcTraseraIzquierda.isGrounded || wcTraseraDerecha.isGrounded;
 
-            wcTraseraIzquierda.motorTorque = 0f;
-            wcTraseraDerecha.motorTorque = 0f;
+        ActualizarFriccionesArcade();
+
+        float frenoDelantero = 0f;
+        float frenoTrasero = 0f;
+        float torqueMotor = 0f;
+
+        if (tocandoSuelo)
+        {
+            if (estaFrenando)
+            {
+                frenoDelantero = fuerzaFrenoMano;
+                frenoTrasero = fuerzaFrenoMano;
+
+                Vector3 localVel = transform.InverseTransformDirection(rb.linearVelocity);
+                localVel.z = Mathf.MoveTowards(localVel.z, 0f, Time.fixedDeltaTime * 55f);
+                rb.linearVelocity = transform.TransformDirection(localVel);
+            }
+            else
+            {
+                if (inputAcelerar < 0f && velocidadLocalZ > 0.2f)
+                {
+                    Vector3 localVel = transform.InverseTransformDirection(rb.linearVelocity);
+                    localVel.z = Mathf.MoveTowards(localVel.z, 0f, Time.fixedDeltaTime * 65f);
+                    rb.linearVelocity = transform.TransformDirection(localVel);
+                    frenoDelantero = fuerzaFrenoDePie;
+                    frenoTrasero = fuerzaFrenoDePie;
+                }
+                else if (inputAcelerar > 0f && velocidadLocalZ < -0.2f)
+                {
+                    Vector3 localVel = transform.InverseTransformDirection(rb.linearVelocity);
+                    localVel.z = Mathf.MoveTowards(localVel.z, 0f, Time.fixedDeltaTime * 65f);
+                    rb.linearVelocity = transform.TransformDirection(localVel);
+                    frenoDelantero = fuerzaFrenoDePie;
+                    frenoTrasero = fuerzaFrenoDePie;
+                }
+                else
+                {
+                    if (inputAcelerar > 0f)
+                    {
+                        torqueMotor = inputAcelerar * fuerzaMotorAdelante;
+                    }
+                    else if (inputAcelerar < 0f)
+                    {
+                        torqueMotor = inputAcelerar * fuerzaMotorAtras;
+                    }
+                }
+            }
         }
-        else
-        {
-            wcTraseraIzquierda.brakeTorque = 0f;
-            wcTraseraDerecha.brakeTorque = 0f;
-            wcDelanteraIzquierda.brakeTorque = 0f;
-            wcDelanteraDerecha.brakeTorque = 0f;
 
-            float torqueActual = 0f;
+        wcTraseraIzquierda.brakeTorque = frenoTrasero;
+        wcTraseraDerecha.brakeTorque = frenoTrasero;
+        wcDelanteraIzquierda.brakeTorque = frenoDelantero;
+        wcDelanteraDerecha.brakeTorque = frenoDelantero;
+
+        wcTraseraIzquierda.motorTorque = torqueMotor;
+        wcTraseraDerecha.motorTorque = torqueMotor;
+
+        float anguloGiroActual = maxAnguloGiro;
+        if (estaDerrapando)
+        {
+            anguloGiroActual *= 1.4f;
+        }
+        else if (velocidadLocalZ < -0.5f)
+        {
+            anguloGiroActual *= 0.6f;
+        }
+
+        float anguloActual = inputGiro * anguloGiroActual;
+        wcDelanteraIzquierda.steerAngle = anguloActual;
+        wcDelanteraDerecha.steerAngle = anguloActual;
+
+        if (estaDerrapando && tocandoSuelo)
+        {
+            if (inputGiro != 0f)
+            {
+                float factorGiroMarchaAtras = (velocidadLocalZ >= -0.5f) ? 1f : 0.2f;
+                rb.AddTorque(transform.up * inputGiro * 28000f * factorGiroMarchaAtras);
+            }
+            else
+            {
+                Vector3 angVel = rb.angularVelocity;
+                angVel.y = Mathf.MoveTowards(angVel.y, 0f, Time.fixedDeltaTime * 20f);
+                rb.angularVelocity = angVel;
+            }
 
             if (inputAcelerar > 0f)
             {
-                torqueActual = inputAcelerar * fuerzaMotorAdelante;
+                rb.AddForce(transform.forward * inputAcelerar * 15000f);
             }
-            else if (inputAcelerar < 0f)
-            {
-                torqueActual = inputAcelerar * fuerzaMotorAtras;
-            }
-
-            wcTraseraIzquierda.motorTorque = torqueActual;
-            wcTraseraDerecha.motorTorque = torqueActual;
         }
 
-        float anguloActual = inputGiro * maxAnguloGiro;
-        wcDelanteraIzquierda.steerAngle = anguloActual;
-        wcDelanteraDerecha.steerAngle = anguloActual;
+        float velocidadFactor = Mathf.InverseLerp(0f, 140f, velocidadKMH);
+        float targetPeso = inputGiro * velocidadFactor;
+        pesoLateral = Mathf.MoveTowards(pesoLateral, targetPeso, Time.fixedDeltaTime * 3.5f);
+
+        if (!estaDerrapando && velocidadKMH > 110f && tocandoSuelo)
+        {
+            rb.AddTorque(transform.forward * pesoLateral * velocidadKMH * 580f);
+        }
+
+        Vector3 velocidadAngular = rb.angularVelocity;
+        velocidadAngular.y = Mathf.Clamp(velocidadAngular.y, -3.0f, 3.0f);
+        rb.angularVelocity = velocidadAngular;
+    }
+
+    void ActualizarFriccionesArcade()
+    {
+        float forwardStiff = estaDerrapando ? 1.5f : 3.5f;
+        float sidewaysStiffDelantero = estaDerrapando ? 0.6f : 4.0f;
+        float sidewaysStiffTrasero = estaDerrapando ? 0.5f : 4.0f;
+
+        ConfigurarCurvaFriccion(wcDelanteraIzquierda, forwardStiff, sidewaysStiffDelantero, estaDerrapando);
+        ConfigurarCurvaFriccion(wcDelanteraDerecha, forwardStiff, sidewaysStiffDelantero, estaDerrapando);
+        ConfigurarCurvaFriccion(wcTraseraIzquierda, forwardStiff, sidewaysStiffTrasero, estaDerrapando);
+        ConfigurarCurvaFriccion(wcTraseraDerecha, forwardStiff, sidewaysStiffTrasero, estaDerrapando);
+    }
+
+    void ConfigurarCurvaFriccion(WheelCollider wc, float forwardStiff, float sidewaysStiff, bool derrapando)
+    {
+        WheelFrictionCurve f = wc.forwardFriction;
+        f.extremumSlip = 0.15f;
+        f.extremumValue = derrapando ? 1.0f : 1.6f;
+        f.asymptoteSlip = 0.4f;
+        f.asymptoteValue = derrapando ? 0.8f : 1.1f;
+        f.stiffness = forwardStiff;
+        wc.forwardFriction = f;
+
+        WheelFrictionCurve s = wc.sidewaysFriction;
+        s.extremumSlip = 0.18f;
+        s.extremumValue = derrapando ? 1.0f : 1.8f;
+        s.asymptoteSlip = 0.45f;
+        s.asymptoteValue = derrapando ? 0.8f : 1.2f;
+        s.stiffness = sidewaysStiff;
+        wc.sidewaysFriction = s;
     }
 
     void ActualizarVisualRueda(WheelCollider col, Transform mesh)
@@ -123,22 +223,8 @@ public class MovimientoCoche : MonoBehaviour
         if (mallaVolante == null) return;
 
         float anguloRuedas = wcDelanteraIzquierda.steerAngle;
-
         float giroVolante = anguloRuedas * multiplicadorGiroVolante;
 
-        mallaVolante.localRotation = rotInicialVolante * Quaternion.Euler(0f, 0f, giroVolante);
-    }
-
-    void ActualizarVelocimetro()
-    {
-        if (mallaVarillaVelocidad == null) return;
-
-        float velocidadKMH = rb.linearVelocity.magnitude * 3.6f;
-
-        float porcentajeVelocidad = Mathf.InverseLerp(0f, maxVelocidadTablero, velocidadKMH);
-
-        float rotacionAguja = porcentajeVelocidad * maxGiroVarilla;
-
-        mallaVarillaVelocidad.localRotation = rotInicialVarillas * Quaternion.Euler(0f, 0f, -rotacionAguja);
+        mallaVolante.localRotation = rotInicialVolante * Quaternion.Euler(giroVolante, 0f, 0f);
     }
 }
