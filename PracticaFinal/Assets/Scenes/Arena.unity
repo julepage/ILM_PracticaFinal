@@ -266,6 +266,11 @@ WheelCollider:
   m_LayerOverridePriority: 0
   m_Enabled: 1
   m_ProvidesContacts: 0
+--- !u!23 &80443376 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -2848997199295789328, guid: e43c45a413b708e42a37b6f461a8581b, type: 3}
+  m_PrefabInstance: {fileID: 164731352}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &164731352
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -362,6 +367,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: d9596ae0ed5dca34bb4daccd8d90bd27, type: 2}
+    - target: {fileID: -2848997199295789328, guid: e43c45a413b708e42a37b6f461a8581b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7798676aaf0d05e44a0bbaf354bade0c, type: 2}
     - target: {fileID: -1965712126363245771, guid: e43c45a413b708e42a37b6f461a8581b, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -654,13 +663,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.4, y: 0.9, z: -0.1}
+  m_LocalRotation: {x: 0.08715578, y: 0, z: 0, w: 0.9961947}
+  m_LocalPosition: {x: -0.06, y: 4.84, z: -9.38}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 587426082}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 10, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -718,7 +727,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CamaraCoche
   objetivo: {fileID: 587426082}
-  posicionExterior: {x: 0, y: 6.43, z: -7.99}
+  posicionExterior: {x: -0.06, y: 4.84, z: -9.38}
   posicionInterior: {x: -0.4, y: 0.9, z: -0.1}
   rotacionExterior: {x: 10, y: 0, z: 0}
   rotacionInterior: {x: 0, y: 0, z: 0}
@@ -966,6 +975,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MovimientoCoche
   source: {fileID: 587426086}
   claxonClip: {fileID: 8300000, guid: c011b0ff2a8cb834f96cb9c7f927f7c5, type: 3}
+  lucesTraseras: {fileID: 1977430375}
   wcDelanteraIzquierda: {fileID: 43932600}
   wcDelanteraDerecha: {fileID: 941780574}
   wcTraseraIzquierda: {fileID: 74501262}
@@ -1197,6 +1207,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: d9596ae0ed5dca34bb4daccd8d90bd27, type: 2}
+    - target: {fileID: -2848997199295789328, guid: e43c45a413b708e42a37b6f461a8581b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7798676aaf0d05e44a0bbaf354bade0c, type: 2}
     - target: {fileID: -1965712126363245771, guid: e43c45a413b708e42a37b6f461a8581b, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -1996,6 +2010,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MovimientoCoche
   source: {fileID: 1647149058}
   claxonClip: {fileID: 8300000, guid: ae8b9959395e00b41bf7c408bd8dedd3, type: 3}
+  lucesTraseras: {fileID: 80443376}
   wcDelanteraIzquierda: {fileID: 2042380055}
   wcDelanteraDerecha: {fileID: 255544284}
   wcTraseraIzquierda: {fileID: 1129461722}
@@ -2462,7 +2477,7 @@ GameObject:
   - component: {fileID: 1862377084}
   m_Layer: 0
   m_Name: Camera2
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2505,7 +2520,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -2598,10 +2613,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CamaraCoche
   objetivo: {fileID: 1647149053}
-  posicionExterior: {x: 0, y: 6.43, z: -7.99}
+  posicionExterior: {x: -0.06, y: 4.84, z: -9.38}
   posicionInterior: {x: -0.4, y: 0.9, z: -0.1}
   rotacionExterior: {x: 10, y: 0, z: 0}
   rotacionInterior: {x: 0, y: 0, z: 0}
+--- !u!23 &1977430375 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -2848997199295789328, guid: e43c45a413b708e42a37b6f461a8581b, type: 3}
+  m_PrefabInstance: {fileID: 591201213}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2042380053
 GameObject:
   m_ObjectHideFlags: 0

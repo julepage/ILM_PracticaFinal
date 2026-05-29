@@ -6,6 +6,9 @@ public class MovimientoCoche : MonoBehaviour
     public AudioSource source;
     public AudioClip claxonClip;
 
+    public Renderer lucesTraseras;
+    private Material matLuces;
+
     private Rigidbody rb;
 
     [Header("Referencias Fisicas")]
@@ -51,9 +54,13 @@ public class MovimientoCoche : MonoBehaviour
         rb.centerOfMass = centroDeMasaOffset;
 
         rotInicialVolante = Quaternion.Euler(27.5f, 90f, 90f);
+
+        if (lucesTraseras != null)
+            matLuces = lucesTraseras.material;
+
     }
 
-   
+
     public void SetInput(float acelerar, float giro, bool freno, bool derrape)//input desde scripts input
     {
         inputAcelerar = acelerar;
@@ -70,6 +77,7 @@ public class MovimientoCoche : MonoBehaviour
         ActualizarVisualRueda(wcTraseraDerecha, meshTraseraDerecha);
 
         ActualizarVolante();
+        ActualizarLuces();
     }
 
     void FixedUpdate()
@@ -100,6 +108,7 @@ public class MovimientoCoche : MonoBehaviour
                 Vector3 localVel = transform.InverseTransformDirection(rb.linearVelocity);
                 localVel.z = Mathf.MoveTowards(localVel.z, 0f, Time.fixedDeltaTime * 55f);
                 rb.linearVelocity = transform.TransformDirection(localVel);
+
             }
             else
             {
@@ -227,6 +236,25 @@ public class MovimientoCoche : MonoBehaviour
     {
         if (source == null || claxonClip == null) return;
 
-       source.PlayOneShot(claxonClip);
+        source.PlayOneShot(claxonClip);
+    }
+
+    void ActualizarLuces()
+    {
+        if (matLuces == null) return;
+
+        //NORMAL
+        if (!estaFrenando && inputAcelerar >= 0f)
+        {
+            matLuces.SetColor("_Color", new Color(2.0f, 2.0f, 1.85f));
+            matLuces.SetFloat("_Intensity", 10.0f);
+        }
+        else 
+        {
+            matLuces.SetColor("_Color", new Color(10f, 0f, 0f));
+            matLuces.SetFloat("_Intensity", 12f);
+        }
+
+  
     }
 }
