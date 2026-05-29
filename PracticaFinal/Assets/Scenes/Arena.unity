@@ -587,6 +587,7 @@ GameObject:
   - component: {fileID: 330585546}
   - component: {fileID: 330585545}
   - component: {fileID: 330585547}
+  - component: {fileID: 330585548}
   m_Layer: 0
   m_Name: Camera1
   m_TagString: MainCamera
@@ -704,6 +705,23 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &330585548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34b9fdc6039dfd940b6b7d513a08a66c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CamaraCoche
+  objetivo: {fileID: 587426082}
+  posicionExterior: {x: 0, y: 6.43, z: -7.99}
+  posicionInterior: {x: -0.4, y: 0.9, z: -0.1}
+  rotacionExterior: {x: 10, y: 0, z: 0}
+  rotacionInterior: {x: 0, y: 0, z: 0}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -887,14 +905,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 506191225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.43, z: 18.49}
+  m_LocalRotation: {x: -0, y: -0.70194346, z: -0, w: 0.7122327}
+  m_LocalPosition: {x: -0.7837045, y: 0.43, z: 18.695194}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1647149053}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -89.166, z: 0}
 --- !u!1 &587426081
 GameObject:
   m_ObjectHideFlags: 0
@@ -906,6 +924,8 @@ GameObject:
   - component: {fileID: 587426082}
   - component: {fileID: 587426084}
   - component: {fileID: 587426083}
+  - component: {fileID: 587426085}
+  - component: {fileID: 587426086}
   m_Layer: 0
   m_Name: CAR
   m_TagString: Untagged
@@ -944,6 +964,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5facef43fbcf7cd4696f12bf9764d693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MovimientoCoche
+  source: {fileID: 587426086}
+  claxonClip: {fileID: 8300000, guid: c011b0ff2a8cb834f96cb9c7f927f7c5, type: 3}
   wcDelanteraIzquierda: {fileID: 43932600}
   wcDelanteraDerecha: {fileID: 941780574}
   wcTraseraIzquierda: {fileID: 74501262}
@@ -988,6 +1010,117 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 3
+--- !u!114 &587426085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 587426081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5100eacec36ffc44fb93af3dc57c9401, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputCocheWASD
+  coche: {fileID: 587426083}
+  camara: {fileID: 330585548}
+--- !u!82 &587426086
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 587426081}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: ae8b9959395e00b41bf7c408bd8dedd3, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &591201213
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1794,6 +1927,8 @@ GameObject:
   - component: {fileID: 1647149054}
   - component: {fileID: 1647149055}
   - component: {fileID: 1647149056}
+  - component: {fileID: 1647149057}
+  - component: {fileID: 1647149058}
   m_Layer: 0
   m_Name: CAR2
   m_TagString: Untagged
@@ -1859,6 +1994,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5facef43fbcf7cd4696f12bf9764d693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MovimientoCoche
+  source: {fileID: 1647149058}
+  claxonClip: {fileID: 8300000, guid: ae8b9959395e00b41bf7c408bd8dedd3, type: 3}
   wcDelanteraIzquierda: {fileID: 2042380055}
   wcDelanteraDerecha: {fileID: 255544284}
   wcTraseraIzquierda: {fileID: 1129461722}
@@ -1897,6 +2034,117 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   reset: 0
+--- !u!114 &1647149057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647149052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dc3c303515f8c14ea9e2cfd50518b96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputCocheFlechas
+  coche: {fileID: 1647149055}
+  camara: {fileID: 1862377084}
+--- !u!82 &1647149058
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647149052}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1654819426
 GameObject:
   m_ObjectHideFlags: 0
@@ -2211,6 +2459,7 @@ GameObject:
   - component: {fileID: 1862377083}
   - component: {fileID: 1862377082}
   - component: {fileID: 1862377081}
+  - component: {fileID: 1862377084}
   m_Layer: 0
   m_Name: Camera2
   m_TagString: Untagged
@@ -2226,13 +2475,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1862377079}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.08715578, y: -0, z: -0, w: 0.9961947}
-  m_LocalPosition: {x: 0, y: 6, z: -10.5}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.4, y: 0.9, z: -0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1647149053}
-  m_LocalEulerAnglesHint: {x: 10, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1862377081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2336,6 +2585,23 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &1862377084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1862377079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34b9fdc6039dfd940b6b7d513a08a66c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CamaraCoche
+  objetivo: {fileID: 1647149053}
+  posicionExterior: {x: 0, y: 6.43, z: -7.99}
+  posicionInterior: {x: -0.4, y: 0.9, z: -0.1}
+  rotacionExterior: {x: 10, y: 0, z: 0}
+  rotacionInterior: {x: 0, y: 0, z: 0}
 --- !u!1 &2042380053
 GameObject:
   m_ObjectHideFlags: 0
