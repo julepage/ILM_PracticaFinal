@@ -6,3 +6,6 @@ Para el proyecto final de la asignatura de Iluminación y Materiales, hemos deci
 El núcleo técnico del proyecto consistirá en el desarrollo de un sistema de deformación de mallas en tiempo real, diseñado para dar un mayor realismo a las colisiones.
 También aplicaremos los modelos de iluminación y shaders estudiados a lo largo del curso con el objetivo de mejorar la estética de los vehículos y conseguir que 
 reaccionen de manera dinámica a los cambios provocados por los impactos.
+
+### Licencia
+Creative Commons BY-NC-SA: uso permitido sin fines comerciales y con obligación de mantener la misma licencia y dar crédito al autor.
