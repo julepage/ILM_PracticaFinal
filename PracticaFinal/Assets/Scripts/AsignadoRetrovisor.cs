@@ -21,7 +21,7 @@ public class AsignadorRetrovisor : MonoBehaviour
         }
 
         //render texture para camara
-        texturaEspejo = new RenderTexture(1024, 512, 16, RenderTextureFormat.ARGB32);
+        texturaEspejo = new RenderTexture(1024, 1024, 16, RenderTextureFormat.ARGB32);
         texturaEspejo.Create();
 
         //camara nueva para shader
