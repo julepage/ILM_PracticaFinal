@@ -1,9 +1,12 @@
+using TMPro;
 using UnityEngine;
 
 public class SelectorCoche : MonoBehaviour
 {
     public GameObject[] coches;
+    public string[] nombresCoches;
     public Transform spawnPoint;
+    public TextMeshProUGUI textoNombre;
 
     public int numeroJugador;
 
@@ -14,6 +17,7 @@ public class SelectorCoche : MonoBehaviour
     {
         if (coches == null || coches.Length == 0) return;
         ActualizarCoche();
+        Actualizar();
     }
 
     public void Siguiente()
@@ -22,6 +26,7 @@ public class SelectorCoche : MonoBehaviour
 
         indiceActual = (indiceActual + 1) % coches.Length;
         ActualizarCoche();
+        Actualizar();
     }
 
     public void Anterior()
@@ -30,6 +35,7 @@ public class SelectorCoche : MonoBehaviour
 
         indiceActual = (indiceActual - 1 + coches.Length) % coches.Length;
         ActualizarCoche();
+        Actualizar();
     }
 
     void ActualizarCoche()
@@ -49,5 +55,11 @@ public class SelectorCoche : MonoBehaviour
         {
             GameManager.instance.personajeJugador2 = indiceActual;
         }
+    }
+
+    void Actualizar()
+    {
+        //actualizar texto
+        textoNombre.text = nombresCoches[indiceActual];
     }
 }
