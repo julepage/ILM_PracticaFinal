@@ -24,8 +24,6 @@ public class coche : MonoBehaviour
 
     void OnCollisionEnter(Collision c)
     {
-        Debug.Log("COLISION DETECTADA: " + c.gameObject.name);
-
         if (c.contactCount == 0) return;
 
         float impulse = c.impulse.magnitude;

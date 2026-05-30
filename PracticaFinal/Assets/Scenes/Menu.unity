@@ -1483,6 +1483,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1621822840}
   - component: {fileID: 1621822839}
+  - component: {fileID: 1621822841}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1520,6 +1521,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1621822841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1621822838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5e281e7ecf873c4da67e448ca0c3a1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ControlNiebla
+  teclaNiebla: 110
+  materialNiebla: {fileID: 2100000, guid: ecdeedab9517b7c419c9a87909969215, type: 2}
+  distanciaConNiebla: 5000
+  distanciaSinNiebla: 100000000
 --- !u!1 &1676567892
 GameObject:
   m_ObjectHideFlags: 0

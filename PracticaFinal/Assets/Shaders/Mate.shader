@@ -121,6 +121,50 @@ Shader "Custom/Mate"
             }
             ENDHLSL
         }
+
+     Pass
+    {
+        Name "ShadowCaster"
+        Tags { "LightMode" = "ShadowCaster" }
+
+        ZWrite On
+        ZTest LEqual
+        ColorMask 0
+
+        HLSLPROGRAM
+        #pragma vertex vert
+        #pragma fragment fragShadow
+
+        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+
+        struct Attributes
+        {
+            float4 positionOS : POSITION;
+            float3 normalOS : NORMAL;
+        };
+
+        struct Varyings
+        {
+            float4 positionHCS : SV_POSITION;
+            float3 normalWS : TEXCOORD0;
+            float3 viewDirWS : TEXCOORD1;
+        };
+
+        Varyings vert (Attributes v)
+        {
+            Varyings o;
+            o.positionHCS = TransformObjectToHClip(v.positionOS.xyz);
+            o.normalWS = TransformObjectToWorldNormal(v.normalOS);
+            o.viewDirWS = float3(0, 0, 0);
+            return o;
+        }
+
+        half4 fragShadow(Varyings IN) : SV_Target
+        {
+            return 0;
+        }
+        ENDHLSL
+    }
     }
     FallBack "Invisible"
 }
