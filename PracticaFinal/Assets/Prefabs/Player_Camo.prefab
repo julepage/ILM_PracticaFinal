@@ -598,6 +598,7 @@ GameObject:
   - component: {fileID: 3818461774351979108}
   - component: {fileID: 5587276710759480072}
   - component: {fileID: 5905867673775678578}
+  - component: {fileID: 6150931262882795116}
   m_Layer: 0
   m_Name: CAR
   m_TagString: Untagged
@@ -826,6 +827,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InputCocheFlechas
   coche: {fileID: 9008055077873361752}
   camara: {fileID: 1459874966914105080}
+--- !u!114 &6150931262882795116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8868970835900248482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad2b355d2667d3f4dbd69adcd8170f69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputCocheMandoFinal
+  coche: {fileID: 9008055077873361752}
+  camara: {fileID: 1459874966914105080}
+  numeroJugador: 2
 --- !u!1001 &3711503199550857186
 PrefabInstance:
   m_ObjectHideFlags: 0

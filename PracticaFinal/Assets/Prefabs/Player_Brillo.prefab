@@ -683,6 +683,15 @@ MonoBehaviour:
   centroDeMasaOffset: {x: 0, y: -0.5, z: 0}
   multiplicadorGiroVolante: 10
   offsetRotacionRueda: {x: 0, y: 0, z: 90}
+  tipoControl: 2
+  mando1_Giro: Horizontal_M1
+  mando1_Acelerar: Vertical_M1
+  mando1_FrenoR2: Freno_M1
+  mando1_DerrapeL2: Derrape_M1
+  mando2_Giro: Horizontal_M2
+  mando2_Acelerar: Vertical_M2
+  mando2_FrenoR2: Freno_M2
+  mando2_DerrapeL2: Derrape_M2
 --- !u!114 &1994212858036576070
 MonoBehaviour:
   m_ObjectHideFlags: 0
