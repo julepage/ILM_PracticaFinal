@@ -90,6 +90,8 @@ Material:
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
+    - _CrumpleIntensity: 0.2
+    - _CrumpleScale: 15
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
@@ -121,7 +123,7 @@ Material:
     - _XRMotionVectorsPass: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.3962264, g: 0.08275412, b: 0.046724804, a: 1}
+    - _BaseColor: {r: 0.07169801, g: 0.06598284, b: 0.065339886, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _RimColor: {r: 0.7546239, g: 0, b: 0.990566, a: 1}

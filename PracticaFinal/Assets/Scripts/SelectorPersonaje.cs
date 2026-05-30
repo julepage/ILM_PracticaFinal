@@ -1,36 +1,45 @@
 using UnityEngine;
-using UnityEngine.UI;
 
-public class SelectorPersonaje : MonoBehaviour
+public class SelectorCoche : MonoBehaviour
 {
-    public Image imagenPersonaje;
-    public Sprite[] personajes;
-    public int numeroJugador;// 1 o 2
+    public GameObject[] coches;
+    public Transform spawnPoint;
+
+    public int numeroJugador;
 
     private int indiceActual = 0;
+    private GameObject cocheActual;
 
     void Start()
     {
-        ActualizarImagen();
+        if (coches == null || coches.Length == 0) return;
+        ActualizarCoche();
     }
 
-    public void siguiente()
+    public void Siguiente()
     {
-        if (personajes == null || personajes.Length == 0) return;
-        indiceActual = (indiceActual + 1) % personajes.Length;//ciclo
-        ActualizarImagen();
+        if (coches == null || coches.Length == 0) return;
+
+        indiceActual = (indiceActual + 1) % coches.Length;
+        ActualizarCoche();
     }
 
     public void Anterior()
     {
-        if (personajes == null || personajes.Length == 0) return;
-        indiceActual = (indiceActual - 1 + personajes.Length) % personajes.Length;
-        ActualizarImagen();
+        if (coches == null || coches.Length == 0) return;
+
+        indiceActual = (indiceActual - 1 + coches.Length) % coches.Length;
+        ActualizarCoche();
     }
 
-    void ActualizarImagen()
+    void ActualizarCoche()
     {
-        imagenPersonaje.sprite = personajes[indiceActual];
+        if (cocheActual != null)
+            Destroy(cocheActual);
+
+        cocheActual = Instantiate(coches[indiceActual], spawnPoint.parent);
+        cocheActual.transform.localPosition = Vector3.zero;
+       // cocheActual.transform.localRotation = Quaternion.identity;
 
         if (numeroJugador == 1)
         {
@@ -38,8 +47,7 @@ public class SelectorPersonaje : MonoBehaviour
         }
         else if (numeroJugador == 2)
         {
-            GameManager.instance.personajeJugador2 = indiceActual;
+            GameManager.instance.personajeJugador1 = indiceActual;
         }
     }
-
 }
