@@ -47,7 +47,7 @@ public class SelectorCoche : MonoBehaviour
         }
         else if (numeroJugador == 2)
         {
-            GameManager.instance.personajeJugador1 = indiceActual;
+            GameManager.instance.personajeJugador2 = indiceActual;
         }
     }
 }
