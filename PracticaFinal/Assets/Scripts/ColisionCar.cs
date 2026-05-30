@@ -37,6 +37,20 @@ public class CollisionCar : MonoBehaviour
                 Material matInstance = rend.material;
                 matInstance.SetInt("_ImpactCount", 0);
                 materialesHijos.Add(matInstance);
+
+                Bounds cajaGigante = new Bounds(Vector3.zero, new Vector3(500f, 500f, 500f));
+
+                MeshFilter meshFilter = rend.GetComponent<MeshFilter>();
+                if (meshFilter != null && meshFilter.mesh != null)
+                {
+                    meshFilter.mesh.bounds = cajaGigante;
+                }
+
+                SkinnedMeshRenderer skinnedRenderer = rend.GetComponent<SkinnedMeshRenderer>();
+                if (skinnedRenderer != null)
+                {
+                    skinnedRenderer.localBounds = cajaGigante;
+                }
             }
         }
     }

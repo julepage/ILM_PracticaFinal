@@ -1,31 +1,30 @@
-Shader "Custom/MetallicChrome"
+Shader "Custom/ChameleonMetallicChrome64"
 {
     Properties
     {
-        _Color1 ("Color base (gris metal)", Color) = (0.7,0.7,0.7,1)
-        _Color2 ("Color iridiscente", Color) = (1,0,1,1)
-        _FresnelPower ("Fresnel Power", Float) = 8
-        _ReflectionStrength ("Reflection Strength", Float) = 1.5
+        _Color1 ("Color Frontal (Cian)", Color) = (0.1, 0.6, 1.0, 1)
+        _Color2 ("Color Lateral (Magenta)", Color) = (0.9, 0.2, 0.9, 1)
+        _FresnelPower ("Cambio de Color (Fresnel)", Float) = 3.0
+        _ReflectionStrength ("Intensidad del Reflejo", Float) = 1.5
+        _CrumpleIntensity ("Intensidad de Arrugas", Range(0, 0.5)) = 0.2
+        _CrumpleScale ("Escala de Arrugas", Range(1, 50)) = 15
     }
 
     SubShader
     {
-        Tags { "RenderPipeline"="UniversalPipeline" }
+        Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" }
 
         Pass
         {
-            HLSLPROGRAM
+            Name "ForwardLit"
+            Tags { "LightMode" = "UniversalForward" }
 
+            HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
-
-            float4 _Color1;
-            float4 _Color2;
-            float _FresnelPower;
-            float _ReflectionStrength;
 
             struct Attributes
             {
@@ -40,15 +39,52 @@ Shader "Custom/MetallicChrome"
                 float3 viewDirWS : TEXCOORD1;
             };
 
+            CBUFFER_START(UnityPerMaterial)
+                float4 _Color1;
+                float4 _Color2;
+                float _FresnelPower;
+                float _ReflectionStrength;
+                float _CrumpleIntensity;
+                float _CrumpleScale;
+            CBUFFER_END
+
+            #define MAX_IMPACTS 64
+            int _ImpactCount;
+            float4 _ImpactPos[MAX_IMPACTS];
+            float4 _ImpactDir[MAX_IMPACTS]; 
+            float4 _ImpactData[MAX_IMPACTS];
+
             Varyings vert (Attributes v)
             {
                 Varyings o;
 
-                float3 positionWS = TransformObjectToWorld(v.positionOS.xyz);
+                float3 worldPos = TransformObjectToWorld(v.positionOS.xyz);
+                float3 worldNormal = TransformObjectToWorldNormal(v.normalOS);
+                worldNormal = normalize(worldNormal);
 
-                o.positionHCS = TransformObjectToHClip(v.positionOS.xyz);
-                o.normalWS = TransformObjectToWorldNormal(v.normalOS);
-                o.viewDirWS = GetWorldSpaceViewDir(positionWS);
+                for (int i = 0; i < _ImpactCount; i++)
+                {
+                    float dist = distance(worldPos, _ImpactPos[i].xyz);
+                    float currentRadius = _ImpactData[i].x;
+                    float currentStrength = _ImpactData[i].y;
+
+                    if (dist < currentRadius)
+                    {
+                        float falloff = saturate(1.0 - (dist / currentRadius));
+                        
+                        float wrinkles = sin(worldPos.x * _CrumpleScale) * cos(worldPos.y * _CrumpleScale) * sin(worldPos.z * _CrumpleScale);
+                        float edgeTension = smoothstep(0.1, 0.9, falloff) * (1.0 - falloff);
+                        
+                        float finalFalloff = falloff + (wrinkles * _CrumpleIntensity * edgeTension);
+                        finalFalloff = saturate(finalFalloff * finalFalloff);
+
+                        worldPos += _ImpactDir[i].xyz * (currentStrength * finalFalloff);
+                    }
+                }
+
+                o.positionHCS = TransformWorldToHClip(worldPos);
+                o.normalWS = worldNormal;
+                o.viewDirWS = GetWorldSpaceViewDir(worldPos);
 
                 return o;
             }
@@ -58,30 +94,32 @@ Shader "Custom/MetallicChrome"
                 float3 N = normalize(i.normalWS);
                 float3 V = normalize(i.viewDirWS);
 
-                //Fresnel 
-                float fresnel = pow(1.0 - saturate(dot(N, V)), _FresnelPower);
+                Light light = GetMainLight();
+                float3 L = normalize(light.direction);
 
-                // base más metálica 
-                float3 baseColor = _Color1.rgb;
+                float fresnelFlip = pow(1.0 - saturate(dot(N, V)), _FresnelPower);
+                float3 paintColor = lerp(_Color1.rgb, _Color2.rgb, fresnelFlip);
 
-                //iridiscencia solo en ángulos
-                baseColor = lerp(baseColor, _Color2.rgb, fresnel * 0.6);
-
-                // reflexión del entorno (CLAVE DEL METAL)
                 float3 R = reflect(-V, N);
                 half4 env = SAMPLE_TEXTURECUBE(unity_SpecCube0, samplerunity_SpecCube0, R);
 
-                // mezcla metálica real
-                float3 finalColor = lerp(baseColor, env.rgb, fresnel * _ReflectionStrength);
+                float3 reflectionColor = env.rgb * paintColor * _ReflectionStrength;
 
-                //  brillo especular extra (cromo)
-                float spec = pow(fresnel, 3);
-                finalColor += spec;
+                float3 halfDir = normalize(L + V);
+                float NdotH = saturate(dot(N, halfDir));
+                float spec = pow(NdotH, 80.0) * 0.6;
+
+                float NdotL = saturate(dot(N, L));
+                float3 diffuse = paintColor * (NdotL * light.color + SampleSH(N));
+
+                float fresnelReflect = pow(1.0 - saturate(dot(N, V)), 3.0);
+                float3 finalColor = lerp(diffuse, reflectionColor, 0.6 + fresnelReflect * 0.4);
+                finalColor += light.color * spec;
 
                 return float4(finalColor, 1);
             }
-
             ENDHLSL
         }
     }
+    FallBack "Invisible"
 }

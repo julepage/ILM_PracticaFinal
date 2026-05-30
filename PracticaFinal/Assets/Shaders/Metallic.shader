@@ -1,12 +1,11 @@
-Shader "Custom/Mate"
+Shader "Metallic"
 {
     Properties
     {
-        [MainColor] _BaseColor("Color de la Pintura", Color) = (0.05, 0.05, 0.05, 1)
-        _Smoothness("Ancho del Reflejo (Cielo/Sol)", Range(0.01, 0.5)) = 0.08
-        _SpecIntensity("Intensidad del Reflejo", Range(0.0, 0.5)) = 0.12
-        _RimIntensity("Claridad en Bordes (Fresnel)", Range(0.0, 1.0)) = 0.35
-        _RimPower("Concentracion en Bordes", Range(1.0, 6.0)) = 2.5
+        _Color ("Color de la Pintura", Color) = (1, 0, 0, 1)
+        _Metallic ("Metalizado", Range(0, 1)) = 0.9
+        _Smoothness ("Brillo / Suavizado", Range(0, 1)) = 0.85
+        _ReflectionStrength ("Intensidad de Reflejo", Float) = 1.2
         _CrumpleIntensity ("Intensidad de Arrugas", Range(0, 0.5)) = 0.2
         _CrumpleScale ("Escala de Arrugas", Range(1, 50)) = 15
     }
@@ -38,17 +37,16 @@ Shader "Custom/Mate"
             {
                 float4 positionHCS : SV_POSITION;
                 float3 normalWS    : TEXCOORD1;
-                float3 viewDirWS   : TEXCOORD2;
-                float3 positionWS  : TEXCOORD3;
+                float3 positionWS  : TEXCOORD2;
+                float3 viewDirWS   : TEXCOORD3;
                 float2 uv          : TEXCOORD4;
             };
 
             CBUFFER_START(UnityPerMaterial)
-                half4 _BaseColor;
+                half4 _Color;
+                half _Metallic;
                 half _Smoothness;
-                half _SpecIntensity;
-                half _RimIntensity;
-                half _RimPower;
+                float _ReflectionStrength;
                 float _CrumpleIntensity;
                 float _CrumpleScale;
             CBUFFER_END
@@ -98,26 +96,32 @@ Shader "Custom/Mate"
 
             half4 frag(Varyings IN) : SV_Target
             {
-                float3 normalWS = normalize(IN.normalWS);
-                float3 viewDirWS = normalize(IN.viewDirWS);
+                float3 N = normalize(IN.normalWS);
+                float3 V = normalize(IN.viewDirWS);
 
                 Light light = GetMainLight();
-                float3 lightDirWS = normalize(light.direction);
+                float3 L = normalize(light.direction);
 
-                half NdotL = saturate(dot(normalWS, lightDirWS));
-                half3 iluminacionAmbiental = SampleSH(normalWS);
-                half3 luzTotalDifusa = (light.color * NdotL) + iluminacionAmbiental;
+                half NdotL = saturate(dot(N, L));
+                half3 ambient = SampleSH(N);
+                half3 diffuse = (light.color * NdotL) + ambient;
 
-                float3 halfDir = normalize(lightDirWS + viewDirWS);
-                half NdotH = saturate(dot(normalWS, halfDir));
-                half especular = pow(NdotH, _Smoothness * 128.0) * _SpecIntensity;
+                float3 H = normalize(L + V);
+                half NdotH = saturate(dot(N, H));
+                half specular = pow(NdotH, _Smoothness * 128.0) * _Smoothness;
 
-                half fresnel = 1.0 - saturate(dot(normalWS, viewDirWS));
-                half3 reflejoBordes = pow(fresnel, _RimPower) * _RimIntensity * (iluminacionAmbiental + light.color * 0.5);
+                half fresnel = pow(1.0 - saturate(dot(N, V)), 4.0);
 
-                half3 colorFinal = (_BaseColor.rgb * luzTotalDifusa) + (light.color * especular) + reflejoBordes;
+                float3 R = reflect(-V, N);
+                half4 env = SAMPLE_TEXTURECUBE(unity_SpecCube0, samplerunity_SpecCube0, R);
 
-                return half4(colorFinal, _BaseColor.a);
+                float3 baseReflection = env.rgb * _ReflectionStrength;
+                float3 materialColor = _Color.rgb * diffuse;
+
+                float3 finalMetallic = lerp(materialColor, baseReflection, _Metallic * (0.2 + fresnel * 0.8));
+                float3 finalColor = finalMetallic + (light.color * specular * _Smoothness);
+
+                return half4(finalColor, _Color.a);
             }
             ENDHLSL
         }
