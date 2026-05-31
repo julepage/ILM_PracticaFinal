@@ -798,12 +798,14 @@ MonoBehaviour:
   - {fileID: 1665072415378936443, guid: c764b42d9fa175d4681b3fd0471dd474, type: 3}
   - {fileID: 7081021269123764089, guid: 8fb70b21acf1e4843b8dd3171d08647e, type: 3}
   - {fileID: 7081021269123764089, guid: 2f43d604e93ab8644b978a530788ce90, type: 3}
+  - {fileID: 4769318375362123635, guid: 7980cca4e03b01543a3a2a7cb4b7c0de, type: 3}
   nombresCoches:
   - MATT
   - CHROME
   - CAMUFLAGE
   - BRIGHT
   - COLLIDER  DEFORMATION
+  - CARTOON
   spawnPoint: {fileID: 534563312}
   textoNombre: {fileID: 421211381}
   numeroJugador: 2
@@ -1985,12 +1987,14 @@ MonoBehaviour:
   - {fileID: 1665072415378936443, guid: c764b42d9fa175d4681b3fd0471dd474, type: 3}
   - {fileID: 7081021269123764089, guid: 8fb70b21acf1e4843b8dd3171d08647e, type: 3}
   - {fileID: 7081021269123764089, guid: 2f43d604e93ab8644b978a530788ce90, type: 3}
+  - {fileID: 4769318375362123635, guid: 7980cca4e03b01543a3a2a7cb4b7c0de, type: 3}
   nombresCoches:
   - MATT
   - CHROME
   - CAMUFLAGE
   - BRIGHT
   - COLLIDER  DEFORMATION
+  - CARTOON
   spawnPoint: {fileID: 1353250647}
   textoNombre: {fileID: 169955043}
   numeroJugador: 1
@@ -2360,6 +2364,7 @@ MonoBehaviour:
   - {fileID: 4769318375362123635, guid: 72e8d90655b75234ebdaa57e54f96bb6, type: 3}
   - {fileID: 4769318375362123635, guid: b0eca16c9a0f08545a0478a25b84efe3, type: 3}
   - {fileID: 4307227525738799512, guid: 0a96e4a7912c437488eb5ca286763694, type: 3}
+  - {fileID: 4769318375362123635, guid: 7980cca4e03b01543a3a2a7cb4b7c0de, type: 3}
 --- !u!4 &1621822840
 Transform:
   m_ObjectHideFlags: 0

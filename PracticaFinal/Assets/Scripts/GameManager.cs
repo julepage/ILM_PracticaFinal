@@ -24,6 +24,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        //para salir luego de la build
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            //solo desde menu
+            if (SceneManager.GetActiveScene().name == "Menu")
+            {
+                CambiarEscena("Arena");
+            }
+        }
+    }
+
     //cambio de escena
     public void CambiarEscena(string nombreEscena)
     {

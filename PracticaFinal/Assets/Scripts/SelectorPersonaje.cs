@@ -20,6 +20,32 @@ public class SelectorCoche : MonoBehaviour
         Actualizar();
     }
 
+    void Update()
+    {
+        if (numeroJugador == 1)
+        {
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                Anterior();
+            }
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                Siguiente();
+            }
+        }
+        else if (numeroJugador == 2)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                Anterior();
+            }
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                Siguiente();
+            }
+        }
+    }
+
     public void Siguiente()
     {
         if (coches == null || coches.Length == 0) return;

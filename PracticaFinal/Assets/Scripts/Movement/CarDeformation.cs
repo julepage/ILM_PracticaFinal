@@ -27,7 +27,6 @@ public class SoftMeshLight : MonoBehaviour
 
     void Awake()
     {
-        //  Auto asignar Rigidbody si no está puesto
         if (rb == null)
         {
             rb = GetComponent<Rigidbody>();
@@ -62,29 +61,6 @@ public class SoftMeshLight : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision c)
-    {
-        //Debug.Log("COLISION DETECTADA: " + c.gameObject.name);
-        //if (c.contactCount == 0) return;
-
-
-        //float impulse = c.impulse.magnitude;
-
-        //if (impulse < minImpactImpulse) return;
-        //if ((deformLayers.value & (1 << c.gameObject.layer)) == 0) return;
-
-        //var cp = c.GetContact(0);
-
-        //Vector3 impactPointWS = cp.point;
-        //Vector3 impactNormalWS = -cp.normal;
-
-        //// OPCIONAL: usar fuerza real del RB
-        //float dynamicStrength = strength * Mathf.Clamp(impulse * 0.1f, 1f, 5f);
-        //float dynamicDistance = maxDistance * Mathf.Clamp(impulse * 0.05f, 1f, 3f);
-
-        //DeformMeshAsync(impactPointWS, impactNormalWS, dynamicStrength, dynamicDistance);
-    }
-
     public void DeformMeshAsync(Vector3 impactPointWS, Vector3 impactNormalWS, float strength, float maxDistance)
     {
         Matrix4x4 l2w = transform.localToWorldMatrix;
@@ -114,15 +90,7 @@ public class SoftMeshLight : MonoBehaviour
         });
     }
 
-    public void DeformMeshAsync(Vector3 impactPointWS, Vector3 impactNormalWS)
-    {
-        DeformMeshAsync(
-            impactPointWS,
-            impactNormalWS,
-            strength,
-            maxDistance
-        );
-    }
+
 
     void ApplyToMesh(Vector3[] verts)
     {
